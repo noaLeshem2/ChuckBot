@@ -3,19 +3,19 @@ const TelegramBot = require('node-telegram-bot-api');
 const axios = require('axios');
 const cheerio = require('cheerio');
 const fetchChuckNorrisJokes = require('./fetchJokes');
-//const { TranslatorTextClient, AzureKeyCredential } = require("@azure/ai-text-analytics");
-const langdetect = require('langdetect');
+const translateText = require('./translateText');
+const iso6391 = require('iso-639-1');
 
-
+// Start of the code
 const telegramToken = process.env.TELEGRAM_BOT_TOKEN; 
 
-
-if (!telegramToken) {
-  console.error('Please provide a valid Telegram bot token in the .env file.');
-  process.exit(1);
+if ( !telegramToken) {
+    console.error('Please provide valid Telegram bot token.');
+    process.exit(1);
 }
 
 const bot = new TelegramBot(telegramToken, { polling: true });
+const usersLanguage = {}; // In-memory store for user language
 
 async function startBot() {
 
@@ -27,6 +27,7 @@ async function startBot() {
     async function handleMessage(msg) {
         const chatId = msg.chat.id;
         const messageText = msg.text;
+        
       
       
         // Check if the message is a number between 1-101
@@ -34,10 +35,12 @@ async function startBot() {
         if (numberRegex.test(messageText)) {
           const number = parseInt(messageText, 10);
           if (number >= 1 && number <= 101) {
-            // Handle the case when the message is a number between 1-101
-            bot.sendMessage(chatId, `Received a number between 1 and 101: ${number}`);
+            // fech joke
+            let joke = "chuck nuris joke"
+            bot.sendMessage(chatId, translateText(joke,getUserLanguage(chatId)));
             return;
           }
+          bot.sendMessage(chatId, `The number ${number} is outside the range between 1 and 101 `);
         }
       
 
@@ -47,12 +50,19 @@ async function startBot() {
 
         if (match) {
             const language = match[1]; // Extract the language
-            const detectedLanguage = await detectLanguage(messageText);
-            if (detectedLanguage) {
-                bot.sendMessage(chatId, `Language set to: ${detectedLanguage}`);
+            const languageCode = getLanguageCode(language);            
+            if (!languageCode) {
+                bot.sendMessage(chatId, `Language set to: ${language}`);
                 return;
             }
-            bot.sendMessage(chatId, `Language set to: ${language}`);
+            setUserLanguage(chatId,languageCode);
+
+            // Translate and send.
+            const translatedText = await translateText("No problem", languageCode).catch((err) => {
+                console.error(err);
+                return;
+            });
+            bot.sendMessage(chatId, translatedText);
             return;
         }
       
@@ -67,56 +77,22 @@ async function startBot() {
 
 startBot();
 
-// function handleMessage(msg) {
-//   const chatId = msg.chat.id;
-//   const messageText = msg.text;
-
-
-//   // Check if the message is a number between 1-101
-//   const numberRegex = /^(\d+)$/;
-//   if (numberRegex.test(messageText)) {
-//     const number = parseInt(messageText, 10);
-//     if (number >= 1 && number <= 101) {
-//       // Handle the case when the message is a number between 1-101
-//       bot.sendMessage(chatId, `Received a number between 1 and 101: ${number}`);
-//       return;
-//     }
-//   }
-
-//   bot.sendMessage(chatId,jokes[3]);
 
 
 
-//   bot.sendMessage(chatId, `Received: ${messageText}`);
+function getLanguageCode(language) {
+    const lowercasedLanguage = language.toLowerCase();
+    const languageCode = iso6391.getCode(lowercasedLanguage); // Get the ISO 639-1 code
 
-// }
-
-
-
-
-
-
-
-// Message handler
-// bot.on('message',handleMessage);
-
-
-async function detectLanguage(language) {
-    try {
-      const result = langdetect.detect(language);
-      return result[0].lang;
-    } catch (error) {
-      console.error('Error detecting language:', error.message);
-      return null;
+    // Check if the language code is found
+    if (languageCode) {
+        return languageCode;
+    } else {
+        console.error(`Language code not found for ${language}`);
+        return null;
     }
-  }
+}
 
-  
-async function translateText(text, targetLanguage) {
-    // Use Azure Translator API to translate text
-    const result = await translatorClient.translate(text, targetLanguage);
-    return result[0].translations[0].text;
-  }
 
 
 function getUserLanguage(chatId) {
@@ -126,8 +102,8 @@ function getUserLanguage(chatId) {
 function setUserLanguage(chatId, language) {
     usersLanguage[chatId] = language;
 }
-
-
+//npm install microsoft-cognitiveservices-translator
+// npm show @azure-rest/ai-translation-text version
 function loadJokes() {
 
 }
@@ -137,3 +113,4 @@ function getJoke(jokeNumber) {
     // translate joke
 
 }
+
