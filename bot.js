@@ -3,16 +3,19 @@ const TelegramBot = require('node-telegram-bot-api');
 const axios = require('axios');
 const cheerio = require('cheerio');
 const fetchChuckNorrisJokes = require('./fetchJokes');
+//const { TranslatorTextClient, AzureKeyCredential } = require("@azure/ai-text-analytics");
+const langdetect = require('langdetect');
 
-const token = process.env.TELEGRAM_BOT_TOKEN; 
+
+const telegramToken = process.env.TELEGRAM_BOT_TOKEN; 
 
 
-if (!token) {
+if (!telegramToken) {
   console.error('Please provide a valid Telegram bot token in the .env file.');
   process.exit(1);
 }
 
-const bot = new TelegramBot(token, { polling: true });
+const bot = new TelegramBot(telegramToken, { polling: true });
 
 async function startBot() {
 
@@ -21,7 +24,7 @@ async function startBot() {
     bot.on('message',handleMessage);
 
 
-    function handleMessage(msg) {
+    async function handleMessage(msg) {
         const chatId = msg.chat.id;
         const messageText = msg.text;
       
@@ -37,7 +40,6 @@ async function startBot() {
           }
         }
       
-        //bot.sendMessage(chatId,jokes[3]);
 
         // Check if the message is to set the language
         const setLanguageRegex = /^set\s+language\s+(\w+)$/i;
@@ -45,7 +47,11 @@ async function startBot() {
 
         if (match) {
             const language = match[1]; // Extract the language
-            //setUserLanguage(userId, language);
+            const detectedLanguage = await detectLanguage(messageText);
+            if (detectedLanguage) {
+                bot.sendMessage(chatId, `Language set to: ${detectedLanguage}`);
+                return;
+            }
             bot.sendMessage(chatId, `Language set to: ${language}`);
             return;
         }
