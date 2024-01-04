@@ -1,5 +1,8 @@
 require('dotenv').config(); // Load environment variables from .env file
 const TelegramBot = require('node-telegram-bot-api');
+const axios = require('axios');
+const cheerio = require('cheerio');
+const fetchChuckNorrisJokes = require('./fetchJokes');
 
 const token = process.env.TELEGRAM_BOT_TOKEN; 
 
@@ -9,48 +12,105 @@ if (!token) {
   process.exit(1);
 }
 
-
 const bot = new TelegramBot(token, { polling: true });
-const usersLanguage = {}; // Users preferred language
+
+async function startBot() {
+
+    //const jokes = await fetchChuckNorrisJokes();
+    // Message handler
+    bot.on('message',handleMessage);
+
+
+    function handleMessage(msg) {
+        const chatId = msg.chat.id;
+        const messageText = msg.text;
+      
+      
+        // Check if the message is a number between 1-101
+        const numberRegex = /^(\d+)$/;
+        if (numberRegex.test(messageText)) {
+          const number = parseInt(messageText, 10);
+          if (number >= 1 && number <= 101) {
+            // Handle the case when the message is a number between 1-101
+            bot.sendMessage(chatId, `Received a number between 1 and 101: ${number}`);
+            return;
+          }
+        }
+      
+        //bot.sendMessage(chatId,jokes[3]);
+
+        // Check if the message is to set the language
+        const setLanguageRegex = /^set\s+language\s+(\w+)$/i;
+        const match = setLanguageRegex.exec(messageText);
+
+        if (match) {
+            const language = match[1]; // Extract the language
+            //setUserLanguage(userId, language);
+            bot.sendMessage(chatId, `Language set to: ${language}`);
+            return;
+        }
+      
+      
+      
+        bot.sendMessage(chatId, `Received: ${messageText}`);
+      
+    }
+
+
+}
+
+startBot();
+
+// function handleMessage(msg) {
+//   const chatId = msg.chat.id;
+//   const messageText = msg.text;
+
+
+//   // Check if the message is a number between 1-101
+//   const numberRegex = /^(\d+)$/;
+//   if (numberRegex.test(messageText)) {
+//     const number = parseInt(messageText, 10);
+//     if (number >= 1 && number <= 101) {
+//       // Handle the case when the message is a number between 1-101
+//       bot.sendMessage(chatId, `Received a number between 1 and 101: ${number}`);
+//       return;
+//     }
+//   }
+
+//   bot.sendMessage(chatId,jokes[3]);
+
+
+
+//   bot.sendMessage(chatId, `Received: ${messageText}`);
+
+// }
+
+
+
+
+
 
 
 // Message handler
-bot.on('message', (msg) => {
-  const chatId = msg.chat.id;
-  const messageText = msg.text;
+// bot.on('message',handleMessage);
 
 
-  // Check if the message is a number between 1-101
-  const numberRegex = /^(\d+)$/;
-  if (numberRegex.test(messageText)) {
-    const number = parseInt(messageText, 10);
-    if (number >= 1 && number <= 101) {
-      // Handle the case when the message is a number between 1-101
-      bot.sendMessage(chatId, `Received a number between 1 and 101: ${number}`);
-      return;
+async function detectLanguage(language) {
+    try {
+      const result = langdetect.detect(language);
+      return result[0].lang;
+    } catch (error) {
+      console.error('Error detecting language:', error.message);
+      return null;
     }
   }
 
-
-
-  bot.sendMessage(chatId, `Received: ${messageText}`);
-});
-
-
-
-function translateText(text, targetLanguage) {
-    // Implement your logic here to call Azure Translator API
-    // For now, let's assume a simple translation based on targetLanguage
-    switch (targetLanguage) {
-      case 'es':
-        return `¡Hola! ${text}`;
-      case 'fr':
-        return `Bonjour! ${text}`;
-      default:
-        return text;
-    }
-}  
-
+  
+async function translateText(text, targetLanguage) {
+    // Use Azure Translator API to translate text
+    const result = await translatorClient.translate(text, targetLanguage);
+    return result[0].translations[0].text;
+  }
 
 
 function getUserLanguage(chatId) {
