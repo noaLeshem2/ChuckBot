@@ -6,9 +6,9 @@ const fetchChuckNorrisJokes = require('./fetchJokes');
 const translateText = require('./translateText');
 const iso6391 = require('iso-639-1');
 
+
 // Start of the code
 const telegramToken = process.env.TELEGRAM_BOT_TOKEN; 
-
 if ( !telegramToken) {
     console.error('Please provide valid Telegram bot token.');
     process.exit(1);
@@ -28,7 +28,9 @@ async function startBot() {
         const chatId = msg.chat.id;
         const messageText = msg.text;
         
-      
+      if(messageText === '/start'){
+        bot.sendMessage(chatId, 'Welcome to ChuckBot! 🤖 /n Do you like Chuck Norris jokes? Just send me a number between 1 and 101, and Ill share a hilarious Chuck Norris fact with you. If you want to switch the language, type "set language [your language]" (e.g., set language French). ');
+      }
       
         // Check if the message is a number between 1-101
         const numberRegex = /^(\d+)$/;
@@ -36,11 +38,12 @@ async function startBot() {
           const number = parseInt(messageText, 10);
           if (number >= 1 && number <= 101) {
             // fech joke
-            let joke = "chuck nuris joke"
-            bot.sendMessage(chatId, translateText(joke,getUserLanguage(chatId)));
+            let joke = "chuck nuris joke";
+            bot.sendMessage(chatId, await translateText(joke,getUserLanguage(chatId)));
             return;
           }
           bot.sendMessage(chatId, `The number ${number} is outside the range between 1 and 101 `);
+          return;
         }
       
 
@@ -110,7 +113,6 @@ function loadJokes() {
 
 function getJoke(jokeNumber) {
     // fetch joke
-    // translate joke
 
 }
 
