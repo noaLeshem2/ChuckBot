@@ -1,17 +1,17 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
+const querystring = require('querystring');
+require("dotenv").config();
 
-const url = 'https://parade.com/968666/parade/chuck-norris-jokes/';
+const jokesUrl = 'https://parade.com/968666/parade/chuck-norris-jokes/';
+const proxyUrl = process.env.PROXY_URL;  // Replace with your actual proxy URL
+const apiKey = process.env.PROXY_API_KEY;  // Replace with your actual API key
 
 async function fetchChuckNorrisJokes() {
   try {
     // Fetch the HTML content from the URL
-    //const response = await axios.get(url);
-    const response = await axios.get(url, {
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36',
-        },
-      });
+    const scrapeOpsUrl = getScrapeOpsUrl(jokesUrl);
+    const response = await axios.get(scrapeOpsUrl);
     const html = response.data;
 
     // Use cheerio to load the HTML content
@@ -20,7 +20,7 @@ async function fetchChuckNorrisJokes() {
     // Extract Chuck Norris jokes from the HTML
     const chuckNorrisJokes = [];
 
-    $('.listicle-item p').each((index, element) => {
+    $('ol li').each((index, element) => {
       const jokeText = $(element).text().trim();
       chuckNorrisJokes.push(jokeText);
     });
@@ -36,4 +36,16 @@ async function fetchChuckNorrisJokes() {
   }
 }
 
+
+function getScrapeOpsUrl(url) {
+    const payload = {
+      api_key: apiKey,
+      url: url,
+    };
+    const proxyUrl = 'https://proxy.scrapeops.io/v1/?' + querystring.stringify(payload);
+    return proxyUrl;
+  }
+  
+
+//let jokes = fetchChuckNorrisJokes();
 module.exports = fetchChuckNorrisJokes;
