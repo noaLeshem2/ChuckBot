@@ -4,6 +4,19 @@
 
 ChuckBot is a Telegram bot that tells 101 different Chuck Norris jokes in any language set by the user using the command 'set language [your language]'. The bot scrapes Chuck Norris jokes in real-time and translates them into the user's preferred language.
 
+## Features
+
+- Fetch Chuck Norris jokes from [parade.com](https://parade.com/968666/parade/chuck-norris-jokes/).
+- Translate jokes to the user's preferred language using the Azure Translator API.
+- Interactive Telegram bot that responds to user commands.
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js installed on your machine.
+- Azure account for translation service.
+- Telegram Bot Token.
 ## Setup
 
 1. Clone the repository:
