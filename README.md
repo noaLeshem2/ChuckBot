@@ -1,10 +1,8 @@
-Certainly! Here's an extended version of your README with the added section about running the bot as functions or as a class:
-
 # ChuckBot - Telegram Bot for Chuck Norris Jokes
 
 ## Overview
 
-ChuckBot is a Telegram bot that tells 101 different Chuck Norris jokes in any language set by the user using the command 'set language'. The bot scrapes Chuck Norris jokes in real-time and translates them into the user's preferred language.
+ChuckBot is a Telegram bot that tells 101 different Chuck Norris jokes in any language set by the user using the command 'set language [your language]'. The bot scrapes Chuck Norris jokes in real-time and translates them into the user's preferred language.
 
 ## Setup
 
@@ -54,11 +52,9 @@ Choose the method that best fits your programming style and enjoy Chuck Norris j
 
 ## Deployment
 
-ChuckBot can be deployed on a free-tier cloud platform of your choice such as AWS or Azure. Ensure you have the necessary configurations set up for environment variables and cloud services.
+ChuckBot can be deployed on a cloud platform. This way you can connect to the service at any time.
 
 ## Usage
 
-Start a chat with ChuckBot on Telegram and interact by sending commands such as '/start', a number between 1 and 101, or 'set language [your language]'.
-```
+Start a chat with ChuckBot on Telegram  - t.me/AssignmentChuckBot.
 
-Feel free to adjust any parts of the text to better suit your needs!
