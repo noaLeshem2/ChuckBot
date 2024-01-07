@@ -1,7 +1,5 @@
 require('dotenv').config(); // Load environment variables from .env file
 const TelegramBot = require('node-telegram-bot-api');
-const axios = require('axios');
-const cheerio = require('cheerio');
 const fetchChuckNorrisJokes = require('./fetchJokes');
 const translateText = require('./translateText');
 const iso6391 = require('iso-639-1');
@@ -10,57 +8,53 @@ const iso6391 = require('iso-639-1');
 // Start of the code
 const telegramToken = process.env.TELEGRAM_BOT_TOKEN; 
 if ( !telegramToken) {
-    console.error('Please provide valid Telegram bot token.');
+    console.error('Please provide a valid Telegram bot token.');
     process.exit(1);
 }
 
 const bot = new TelegramBot(telegramToken, { polling: true });
 const usersLanguage = {}; // In-memory store for user language
 const jokes = loadJokes();
-async function startBot() {
 
-    //const jokes = await fetchChuckNorrisJokes();
+async function startBot() {
     // Message handler
     bot.on('message',handleMessage);
-
 
     async function handleMessage(msg) {
         const chatId = msg.chat.id;
         const messageText = msg.text;
         
-      if(messageText === '/start'){
-        bot.sendMessage(chatId, 'Welcome to ChuckBot! 🤖\nDo you like Chuck Norris jokes? Just send me a number between 1 and 101, and I\'ll share a hilarious Chuck Norris fact with you. If you want to switch the language, type "set language [your language]" (e.g., set language French).');
-        return;
-      }
-      
+        if(messageText === '/start'){
+            bot.sendMessage(chatId, 'Welcome to ChuckBot! 🤖\nDo you like Chuck Norris jokes? Just send me a number between 1 and 101, and I\'ll share a hilarious Chuck Norris fact with you. If you want to switch the language, type "set language [your language]" (e.g., set language French).');
+            return;
+        }
+        
         // Check if the message is a number between 1-101
         const numberRegex = /^(\d+)$/;
         if (numberRegex.test(messageText)) {
-          const number = parseInt(messageText, 10);
-          if (number >= 1 && number <= 101) {
-            // fech joke
-            let joke = getJoke(number);
+            const number = parseInt(messageText, 10);
+            if (number >= 1 && number <= 101) { // Number inside the range
+            let joke = getJoke(number); // Fetch joke
             bot.sendMessage(chatId, await translateText(joke,getUserLanguage(chatId)));
             return;
-          }
-          bot.sendMessage(chatId, `The number ${number} is outside the range between 1 and 101 `);
-          return;
+            }
+            bot.sendMessage(chatId,`The number ${number} is outside the valid range. \nPlease enter a number between 1 and 101.`);
+            return;
         }
-      
+        
 
         // Check if the message is to set the language
         const setLanguageRegex = /^set\s+language\s+(\w+)$/i;
         const matchLangPattern = setLanguageRegex.exec(messageText);
-
         if (matchLangPattern) {
+
             const language = matchLangPattern[1]; // Extract the language
             const languageCode = getLanguageCode(language);            
             if (!languageCode) {
-                bot.sendMessage(chatId, `Language set to: ${language}`);
-                return;
+            bot.sendMessage(chatId, `The Language set to: ${language} is not vaild. \nPlease choose a supported language.`);
+            return;
             }
             setUserLanguage(chatId,languageCode);
-
             // Translate and send.
             const translatedText = await translateText("No problem", languageCode).catch((err) => {
                 console.error(err);
@@ -69,11 +63,9 @@ async function startBot() {
             bot.sendMessage(chatId, translatedText);
             return;
         }
-      
-      
-      
-        bot.sendMessage(chatId, `Received: ${messageText}`);
-      
+        
+        bot.sendMessage(chatId, `Sorry, I didn't recognize that instruction. \n Please check the available commands and try again.`);
+        
     }
 
 
@@ -87,8 +79,6 @@ startBot();
 function getLanguageCode(language) {
     const lowercasedLanguage = language.toLowerCase();
     const languageCode = iso6391.getCode(lowercasedLanguage); // Get the ISO 639-1 code
-
-    // Check if the language code is found
     if (languageCode) {
         return languageCode;
     } else {
@@ -210,12 +200,12 @@ function loadJokes() {
         "Chuck Norris's cowboy boots are made from real cowboys.",
         'Chuck Norris can start a fire with an ice cube.',
         'The flu gets a Chuck Norris shot every year.'
-      ];
+    ];
     return fetchChuckNorrisJokes();
 }
 
 function getJoke(jokeNumber) {
-    // fetch joke
+    // Fetch joke and send at the right format
     return jokeNumber.toString() + '. ' + jokes[jokeNumber-1];
 
 }
