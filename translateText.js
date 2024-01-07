@@ -19,7 +19,7 @@ async function translateText(targetText, targetLanguage) {
   
   const translateCedential = {
     key: TRANSLATOR_API_KEY,
-    TRANSLATOR_REGION,
+    region: TRANSLATOR_REGION,
   };
   const translationClient = TextTranslationClient(TRANSLATOR_ENDPOINT, translateCedential);
 

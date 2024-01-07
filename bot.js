@@ -64,7 +64,7 @@ async function startBot() {
             return;
         }
         
-        bot.sendMessage(chatId, `Sorry, I didn't recognize that instruction. \n Please check the available commands and try again.`);
+        bot.sendMessage(chatId, `Sorry, I didn't recognize that instruction. \nPlease check the available commands and try again.`);
         
     }
 
