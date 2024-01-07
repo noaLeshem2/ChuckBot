@@ -17,6 +17,7 @@ ChuckBot is a Telegram bot that tells 101 different Chuck Norris jokes in any la
 - Node.js installed on your machine.
 - Azure account for translation service.
 - Telegram Bot Token.
+- ScrapeOps Proxy API key for scraping data.
 ### Setup
 
 1. Clone the repository:
