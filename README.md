@@ -1,43 +1,33 @@
-# ChuckBot
+Certainly! Here's an extended version of your README with the added section about running the bot as functions or as a class:
 
-ChuckBot is a Telegram bot that shares Chuck Norris jokes and supports multilingual responses.
+```markdown
+# ChuckBot - Telegram Bot for Chuck Norris Jokes
 
-## Features
+## Overview
 
-- Receive Chuck Norris jokes by sending a number between 1 and 101.
-- Set the language of the bot by sending a command like "set language French."
-- Automatic language detection for common phrases.
+ChuckBot is a Telegram bot that tells 101 different Chuck Norris jokes in any language set by the user using the command 'set language'. The bot scrapes Chuck Norris jokes in real-time and translates them into the user's preferred language.
 
-## Getting Started
-
-### Prerequisites
-
-- Node.js installed on your machine
-- Telegram Bot Token (get it from the [BotFather](https://t.me/BotFather))
-- Azure Translator API key and endpoint
-- ScrapeOps API key for scraping data
-
-
-### Installation
+## Setup
 
 1. Clone the repository:
-
    ```bash
-   git clone https://github.com/noaLeshem2/ChuckBot.git
+   git clone https://github.com/your-username/ChuckBot.git
+   cd ChuckBot
+   ```
 
 2. Install dependencies:
-
    ```bash
    npm install
+   ```
 
-3. Create a .env file in the project root and add the following variables:
-
-   ```dotenv
-   TELEGRAM_BOT_TOKEN=your-telegram-bot-token
-   AZURE_TRANSLATOR_API_KEY=your-azure-translator-api-key
-   AZURE_TRANSLATOR_ENDPOINT=your-azure-translator-endpoint
-   AZURE_REGION=your-azure-region
-   PROXY_API_KEY=your-scraper-proxy-api-key
+3. Set up your environment variables by creating a `.env` file with the following content:
+   ```env
+   TELEGRAM_BOT_TOKEN=your_telegram_bot_token
+   AZURE_TRANSLATOR_API_KEY=your_azure_translator_api_key
+   AZURE_TRANSLATOR_ENDPOINT=your_azure_translator_endpoint
+   AZURE_REGION=your_azure_region
+   PROXY_API_KEY=your_proxy_api_key
+   ```
 
 ## Running the Bot
 
@@ -47,24 +37,29 @@ ChuckBot can be run either as a set of functions or as a class, providing flexib
 
 If you prefer running ChuckBot as a set of functions, follow these steps:
 
-
-#### Navigate to the project directory
 ```bash
-cd ChuckBot
-
-#### Run the bot using functions
+# Run the bot using functions
 node bot.js
+```
 
 ### Running as a Class
 
 If you prefer an object-oriented approach and want to run ChuckBot as a class, follow these steps:
 
 ```bash
-# Navigate to the project directory
-cd ChuckBot
-
-# Run the bot using functions
+# Run the bot using the class
 node chuckBot.js
+```
 
+Choose the method that best fits your programming style and enjoy Chuck Norris jokes in your preferred way!
 
-2ץ
+## Deployment
+
+ChuckBot can be deployed on a free-tier cloud platform of your choice such as AWS or Azure. Ensure you have the necessary configurations set up for environment variables and cloud services.
+
+## Usage
+
+Start a chat with ChuckBot on Telegram and interact by sending commands such as '/start', a number between 1 and 101, or 'set language [your language]'.
+```
+
+Feel free to adjust any parts of the text to better suit your needs!
