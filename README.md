@@ -1,6 +1,5 @@
 Certainly! Here's an extended version of your README with the added section about running the bot as functions or as a class:
 
-```markdown
 # ChuckBot - Telegram Bot for Chuck Norris Jokes
 
 ## Overview
