@@ -17,7 +17,6 @@ ChuckBot is a Telegram bot that shares Chuck Norris jokes and supports multiling
 - Azure Translator API key and endpoint
 - ScrapeOps API key for scraping data
 
-- 
 
 ### Installation
 
@@ -40,8 +39,6 @@ ChuckBot is a Telegram bot that shares Chuck Norris jokes and supports multiling
    AZURE_REGION=your-azure-region
    PROXY_API_KEY=your-scraper-proxy-api-key
 
-
-
 ## Running the Bot
 
 ChuckBot can be run either as a set of functions or as a class, providing flexibility for different preferences.
@@ -50,11 +47,12 @@ ChuckBot can be run either as a set of functions or as a class, providing flexib
 
 If you prefer running ChuckBot as a set of functions, follow these steps:
 
+
+#### Navigate to the project directory
 ```bash
-# Navigate to the project directory
 cd ChuckBot
 
-# Run the bot using functions
+#### Run the bot using functions
 node bot.js
 
 ### Running as a Class
