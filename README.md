@@ -56,5 +56,5 @@ ChuckBot can be deployed on a cloud platform. This way you can connect to the se
 
 ## Usage
 
-Start a chat with ChuckBot on Telegram  - t.me/AssignmentChuckBot.
+Start a chat with ChuckBot on Telegram - https://t.me/AssignmentChuckBot
 
