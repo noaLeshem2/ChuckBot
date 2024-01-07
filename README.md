@@ -5,9 +5,9 @@
 ChuckBot is a Telegram bot that tells 101 different Chuck Norris jokes in any language set by the user using the command 'set language [your language]'. The bot scrapes Chuck Norris jokes in real-time and translates them into the user's preferred language. Start a chat with ChuckBot on Telegram - https://t.me/AssignmentChuckBot 
 
 ### How to Connect the Chat
-1. *Start the Bot*: Send the /start command to initiate the bot and receive a warm welcome message.
-2. *Get a Chuck Norris Joke*: Send a number between 1 and 101 to receive a Chuck Norris joke tailored just for you.
-3. *Switch Language*: Utilize the set language [your language] command to set your preferred language for joke translations.
+1. **Start the Bot**: Send the /start command to initiate the bot and receive a warm welcome message.
+2. **Get a Chuck Norris Joke**: Send a number between 1 and 101 to receive a Chuck Norris joke tailored just for you.
+3. **Switch Language**: Utilize the set language [your language] command to set your preferred language for joke translations.
 
 
 ## Features
