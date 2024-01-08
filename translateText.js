@@ -11,6 +11,7 @@ const TRANSLATOR_REGION = process.env.AZURE_REGION;
 
 // Translate text from English to target Language
 async function translateText(targetText, targetLanguage) {
+  
   // If the target language is English, return the text as is
   if(targetLanguage === "en"){
     return targetText;
