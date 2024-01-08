@@ -1,8 +1,7 @@
 // translateText.js
 const TextTranslationClient = require("@azure-rest/ai-translation-text").default,
   { isUnexpected } = require("@azure-rest/ai-translation-text");
-
-require("dotenv").config();
+require("dotenv").config(); // Load environment variables
 
 
 const TRANSLATOR_API_KEY = process.env.AZURE_TRANSLATOR_API_KEY;
@@ -10,9 +9,9 @@ const TRANSLATOR_ENDPOINT = process.env.AZURE_TRANSLATOR_ENDPOINT;
 const TRANSLATOR_REGION = process.env.AZURE_REGION;
 
 
-// Translate text from english to targetLanguage
+// Translate text from English to target Language
 async function translateText(targetText, targetLanguage) {
-
+  // If the target language is English, return the text as is
   if(targetLanguage === "en"){
     return targetText;
   }
@@ -37,9 +36,7 @@ async function translateText(targetText, targetLanguage) {
   }
 
   const translations = translateResponse.body;
-  for (const translation of translations) {
-    return translation?.translations[0]?.text;
-  }
+  return translations[0]?.translations[0]?.text;
 }
   
 

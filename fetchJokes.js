@@ -3,15 +3,15 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 const querystring = require('querystring');
-require("dotenv").config();
+require("dotenv").config(); // Load environment variables
 
 const JOKES_URL = 'https://parade.com/968666/parade/chuck-norris-jokes/';
 const PROXY_API_KEY = process.env.PROXY_API_KEY;  
 
+// Fetch Chuck Norris jokes from the specified URL
 async function fetchChuckNorrisJokes() {
   try {
-    // Fetch the HTML content from the URL
-    const scrapeOpsUrl = getScrapeOpsUrl(JOKES_URL);
+    const scrapeOpsUrl = getScrapeOpsUrl(JOKES_URL); // Fetch the HTML content
     const response = await axios.get(scrapeOpsUrl);
     const html = response.data;
 
@@ -31,7 +31,7 @@ async function fetchChuckNorrisJokes() {
   }
 }
 
-
+// Generate the URL for proxying requests
 function getScrapeOpsUrl(url) {
     const payload = {
       api_key: PROXY_API_KEY,
